@@ -13,7 +13,7 @@ namespace ChatApp.API.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
             await Clients.Groups(conn.ChatRoom)
-                .SendAsync("ReceiveMessage", "admin", $"{conn.UserName} has joined {conn.ChatRoom}.");
+                .SendAsync("JoinSpecificChatRoom", "admin", $"{conn.UserName} has joined {conn.ChatRoom}.");
         }
 
     }

@@ -28,7 +28,7 @@ function App() {
     <div>
       <main>
         <Container>
-          <Row class='px-5 my-5'>
+          <Row className='px-5 my-5'>
             <Col ms='12'>
             <h1 className='font-weight-light'>Welcome to the V1 ChatApp</h1>
             </Col>
