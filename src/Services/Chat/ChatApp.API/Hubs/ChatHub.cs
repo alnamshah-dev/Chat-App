@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.API.Hubs
 {
-    public class ChatHub(SharedDb _shared):Hub
-    {
+    public class ChatHub(SharedDb _shared) :Hub
+    {   
         public async Task JoinChat(UserConnection conn)
         {
             await Clients.All.SendAsync("ReceiveMessage", "admin", $"{conn.UserName} has joined");
@@ -14,14 +14,14 @@ namespace ChatApp.API.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
             _shared.connections[Context.ConnectionId]=conn;
-            await Clients.Groups(conn.ChatRoom)
+            await Clients.Group(conn.ChatRoom)
                 .SendAsync("JoinSpecificChatRoom", "admin", $"{conn.UserName} has joined {conn.ChatRoom}.");
         }
         public async Task SendMessage(string msg)
         {
             if(_shared.connections.TryGetValue(Context.ConnectionId, out UserConnection conn))
             {
-                await Clients.Groups(conn.ChatRoom).SendAsync("ReceiveSpecificMessage",conn.UserName,msg);
+                await Clients.Group(conn.ChatRoom).SendAsync("ReceiveSpecificMessage",conn.UserName,msg);
             }
         }
     }

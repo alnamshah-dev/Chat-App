@@ -1,16 +1,12 @@
-
-
-
-const MessageContainer=({messages})=>{
+const MessageContainer=({messages}) => {
     return <div>
         {
-            messages.map((msg, index)=>
-                <table striped border>
+            messages.map((msg, index) =>
+                <table striped bordered>
                     <tr key={index}>
-                        <td>{msg.msg} - {msg.username} </td>
+                        <td>{msg.msg} - {msg.username}</td>
                     </tr>
-                </table>
-            )
+                </table>)
         }
     </div>
 } 

@@ -20,7 +20,7 @@ function App() {
       });
       conn.on("ReceiveSpecificMessage",(username,msg)=>{
         setMessages(messages=>[...messages,{username,msg}]);
-      });
+      })
       await conn.start();
       await conn.invoke("JoinSpecificChatRoom",{username,chatroom});
       setConnection(conn);
@@ -37,14 +37,12 @@ function App() {
             <h1 className='font-weight-light'>Welcome to the V1 ChatApp</h1>
             </Col>
           </Row>
-          {!conn
-            ?<WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
-            :<ChatRoom messages={messages}></ChatRoom>
+          { !conn
+            ? <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
+            : <ChatRoom messages={messages}></ChatRoom>
           }
-          
         </Container>
       </main>
-      
     </div>
   );
 }
