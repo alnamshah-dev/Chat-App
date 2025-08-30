@@ -24,8 +24,15 @@ function App() {
       await conn.start();
       await conn.invoke("JoinSpecificChatRoom",{username,chatroom});
       setConnection(conn);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  const sendMessage=async(message) => {
+    try {
+      await conn.invoke("SendMessage",message);
+    } catch (e) {
+      console.log(e);
     }
   }
   return (
@@ -39,7 +46,7 @@ function App() {
           </Row>
           { !conn
             ? <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
-            : <ChatRoom messages={messages}></ChatRoom>
+            : <ChatRoom messages={messages} sendMessage={sendMessage}></ChatRoom>
           }
         </Container>
       </main>
