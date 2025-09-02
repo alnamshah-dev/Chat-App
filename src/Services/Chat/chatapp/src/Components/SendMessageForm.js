@@ -1,22 +1,35 @@
-import { sendMessage } from "@microsoft/signalr/dist/esm/Utils";
-import { useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { useState } from 'react';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 
+const SendMessageForm = ({ sendMessage }) => {
+    const [msg, setMsg] = useState('');
 
-
-const SendMessageForm =({sendMessage}) =>{
-    const[msg, setMessage] = useState('');
-    return <Form onSubmit={e=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        sendMessage(msg);
-        setMessage('');
-    }}>
-        <InputGroup className="mb-3">
-            <InputGroup.Text>Chat</InputGroup.Text>
-            <Form.Control onChange={e=> setMessage(e.target.value)} value={msg} placeholder="Type a message"></Form.Control>
-            <Button variant="primary" type="submit" disabled={!msg}>Send</Button>
-        </InputGroup>
-    </Form>
-}
+        if (msg.trim()) {
+            sendMessage(msg);
+            setMsg('');
+        }
+    };
+
+    return (
+        <div className="send-message-form-container">
+            <Form onSubmit={handleSubmit}>
+                <InputGroup>
+                    <Form.Control
+                        className="message-input"
+                        placeholder="Type your message here..."
+                        value={msg}
+                        onChange={e => setMsg(e.target.value)}
+                        autoComplete="off"
+                    />
+                    <Button variant="primary" type="submit" disabled={!msg.trim()}>
+                        Send
+                    </Button>
+                </InputGroup>
+            </Form>
+        </div>
+    );
+};
 
 export default SendMessageForm;

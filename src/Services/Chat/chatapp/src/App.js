@@ -1,57 +1,84 @@
-import {Col, Row, Container } from 'react-bootstrap';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import WaitingRoom from './Components/waitingroom';
 import { useState } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+
+import WaitingRoom from './Components/waitingroom';
 import ChatRoom from './Components/ChatRoom';
 
 function App() {
-  const[conn,setConnection]=useState();
-  const[messages,setMessages]=useState([]);
-  const joinChatRoom=async(username, chatroom)=>{
-    try {
-      const conn = new HubConnectionBuilder()
-      .withUrl("http://localhost:5028/chat")
-      .configureLogging(LogLevel.Information)
-      .build();
-      conn.on("JoinSpecificChatRoom",(username,msg)=>{
-        console.log("msg: ",msg);
-      });
-      conn.on("ReceiveSpecificMessage",(username,msg)=>{
-        setMessages(messages=>[...messages,{username,msg}]);
-      })
-      await conn.start();
-      await conn.invoke("JoinSpecificChatRoom",{username,chatroom});
-      setConnection(conn);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  const sendMessage=async(message) => {
-    try {
-      await conn.invoke("SendMessage",message);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  return (
-    <div>
-      <main>
-        <Container>
-          <Row className='px-5 my-5'>
-            <Col ms='12'>
-            <h1 className='font-weight-light'>Welcome to the V1 ChatApp</h1>
-            </Col>
-          </Row>
-          { !conn
-            ? <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
-            : <ChatRoom messages={messages} sendMessage={sendMessage}></ChatRoom>
-          }
-        </Container>
-      </main>
-    </div>
-  );
+    const [connection, setConnection] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [user, setUser] = useState('');
+    const [chatroom, setChatroom] = useState('');
+
+    const joinChatRoom = async (username, room) => {
+        try {
+            const conn = new HubConnectionBuilder()
+                .withUrl("http://localhost:5028/chat" ) // تأكد من صحة العنوان
+                .configureLogging(LogLevel.Information)
+                .build();
+
+            conn.on("JoinSpecificChatRoom", (username, msg) => {
+                console.log("Welcome message from server: ", msg);
+            });
+            
+
+            conn.on("ReceiveSpecificMessage", (username, msg) => {
+                const newMessage = {
+                    username,
+                    msg,
+                    timestamp: new Date() 
+                };
+                setMessages(prev => [...prev, newMessage]);
+            });
+
+            conn.onclose(() => leaveChat());
+
+            await conn.start();
+            await conn.invoke("JoinSpecificChatRoom", { username, chatroom: room });
+
+            setConnection(conn);
+            setUser(username);
+            setChatroom(room);
+
+        } catch (e) {
+            console.error(e);
+            alert("Connection failed. Please check the server and try again.");
+        }
+    };
+
+    const leaveChat = () => {
+        connection?.stop();
+        setConnection(null);
+        setMessages([]);
+        setUser('');
+        setChatroom('');
+    };
+
+    const sendMessage = async (message) => {
+        try {
+            await connection.invoke("SendMessage", message);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    return (
+        <div className="app-container">
+            {
+                !connection
+                    ? <WaitingRoom joinChatRoom={joinChatRoom} />
+                    : <ChatRoom
+                        messages={messages}
+                        sendMessage={sendMessage}
+                        currentUser={user}
+                        chatroom={chatroom}
+                        leaveChat={leaveChat}
+                      />
+            }
+        </div>
+    );
 }
 
 export default App;

@@ -1,0 +1,130 @@
+/* === General App Styles === */
+body, #root, .app-container {
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* === WaitingRoom Styles === */
+.waiting-room-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.waiting-room-card {
+    width: 100%;
+    max-width: 400px;
+    border: none;
+    border-radius: 15px;
+}
+.app-title {
+    font-weight: 300; /* font-weight-light */
+}
+
+/* === ChatRoom Styles === */
+.chatroom-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+.chat-card {
+    width: 100%;
+    max-width: 800px;
+    height: 90vh;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+/* === MessageContainer Styles === */
+.message-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+.message-left {
+    justify-content: flex-start;
+}
+.message-right {
+    flex-direction: row-reverse;
+}
+.message-right .message-content {
+    align-items: flex-end;
+}
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+.message-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+}
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.username {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+.timestamp {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 18px;
+    word-wrap: break-word;
+}
+.other-user-bubble {
+    background-color: #e9ecef;
+    color: #212529;
+    border-top-left-radius: 0;
+}
+.current-user-bubble {
+    background-color: #007bff;
+    color: white;
+    border-top-right-radius: 0;
+}
+
+/* === SendMessageForm Styles === */
+.send-message-form-container {
+    padding: 20px;
+    border-top: 1px solid #e9ecef;
+    background-color: #fff;
+}
+.message-input {
+    border-right: none;
+}
+.message-input:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
